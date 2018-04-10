@@ -1,0 +1,51 @@
+<import name="rate" src="../rating/index"></import>
+<template>
+<div>
+  <div class="cover-content" onclick="toDetail(mess.id)">
+      <image  class="img" src="{{mess.image || mess.images.small}}"></image>
+      <div class="content">
+        <div>
+          <text class="title">{{mess.title.slice(0, 7)}}</text>
+        </div>
+        <rate rate="{{mess.rating.numRaters || mess.rating.stars ? mess.rating.average : ''}}"></rate>
+      </div>
+    </div> 
+</div>
+</template>
+
+<style>
+  .cover-warp {
+    width: 100%;
+    
+  }
+  .cover-content {
+    width: 210px;
+    display: flex;
+    flex-direction: column;
+  }
+  .img {
+    width: 210px;
+    height: 315px;
+  }
+  .content {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+  }
+  .title {
+    text-align: center;
+  }
+</style>
+
+<script>
+  export default {
+    props: ['mess'],
+    onInit () {
+      // console.log(345, JSON.stringify(this.mess), 8888);
+    },
+    toDetail (id) {
+      console.log(11111, id);
+      this.$dispatch('toDetail', {id: id})
+    }
+  }
+</script>

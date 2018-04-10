@@ -1,0 +1,168 @@
+<import name="rate" src="../components/rating/index"></import>
+<import name="header" src="../components/header/index"></import>
+<template>
+  <div class="warp">
+    <header  title="音乐详情"></header>
+    <div class="warp-content">
+      <div>
+      <text class="title" style="color: {{theme.color}}">{{detail.title}}</text>
+    </div>
+    <div class="mess-warp" if="{{detail.id}}">
+      <div class="mess">
+        <div>
+          <rate rate="{{detail.rating && detail.rating.numRaters ? detail.rating.average : ''}}"></rate>
+          <text class="remark">{{detail.rating && detail.rating.numRaters}}人评价</text>
+        </div>
+        <div class="move">
+          <text><span style="color: {{theme.color}}">表演者：</span>{{detail.attrs && detail.attrs.singer}}</text>
+          <text><span style="color: {{theme.color}}">唱片公司：</span>{{detail.attrs && detail.attrs.publisher}}</text>
+          <text><span style="color: {{theme.color}}">发行时间：</span>{{detail.attrs && detail.attrs.pubdate}}</text>
+        </div>
+      </div>
+      <image class="cover" src="{{detail.image}}"></image>
+    </div>
+
+    <text class="introduct" if="{{detail.id}}" style="color: {{theme.color}}">唱片简介</text>
+    <text class="introduct-detail">{{detail.summary}}</text>
+    <text class="actor" if="{{detail.id}}" style="color: {{theme.color}}">曲目列表</text>
+    <div for="{{detail.singList}}">
+      <text>{{$item}}</text>
+    </div>
+    <text class="introduct" if="{{detail.id}}" style="color: {{theme.color}}">相关标签</text>
+    <div class="tag-warp">
+      <div class="tag-item" for="{{detail.tags}}">
+        <div class="tag">
+          <text>{{$item.name}}</text>
+        </div>
+      </div>
+    </div>
+    <text onclick="toDouban" class="button" style="background-color: {{theme.color}}">豆瓣看详情</text>
+    </div>
+  </div>
+</template>
+
+<style>
+  .button {
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    border-radius: 6px;
+    color: #ffffff;
+    margin: 20px 0 30px 250px;
+  }
+  .warp {
+    display: flex;
+    flex-direction:column;
+    background-color: #ffffff;
+  }
+  .warp-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+  }
+  .title {
+    font-size: 42px;
+    margin-bottom: 20px;
+  }
+  .remark {
+    font-size: 24px;
+    margin-left: 15px;
+    color: #aaaaaa;
+  }
+  .cover {
+    width: 210px;
+    height: 315px;
+    margin-left: 30px;
+  }
+  .mess-warp {
+    display: flex;
+    margin-bottom: 40px;
+  }
+  .mess {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .mess-word {
+    font-size: 26px;
+    line-height: 40px;
+    margin-top: 24px;
+  }
+  .introduct {
+    color: #aaaaaa;
+    font-size: 30px;
+    margin: 30px 0 20px;
+  }
+  .introduct-detail {
+    line-height: 42px;
+  }
+  .tag {
+    padding: 5px 20px;
+    border-radius: 30px;
+    background-color:#f5f5f5;
+    color: #494949;
+  }
+  .tag-warp {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .tag-item {
+    padding: 10px 5px;
+  }
+  .move {
+    display: flex;
+    flex-direction: column;
+    font-size: 24px;
+    margin-top: 30px;
+  }
+  .actor {
+    color: #aaaaaa;
+    margin: 30px 0 10px;
+  }
+  .su-title {
+    color: #999999;
+    margin-top: 20px;
+  }
+  .e-book {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+  .line {
+      width: 100%;
+      border: 1px solid #dddddd;
+  }
+  .line-middle {
+      width: 100%;
+      border: 1px solid #eeeeee;
+  }
+</style>
+
+<script>
+import webview from '@system.webview'
+export default {
+  public : {
+    detail: {},
+    id: '',
+    theme: {color: ''}
+  },
+  onReady () {
+    this.theme = this.$app.$def.theme;
+    this.$page.setTitleBar({backgroundColor: this.theme.color, textColor: '#ffffff'});
+    this.getData();
+  },
+  async getData () {
+    const detail = await network.get('/v2/music/' + this.id);
+    const data = JSON.parse(detail);
+    this.detail = Object.assign(data, {singList: data.attrs.tracks[0].split('\n')});
+    // console.log(JSON.stringify(this.detail), 5555);
+  },
+  toDouban () {
+    webview.loadUrl({
+      url: 'https://m.douban.com/music/subject/'+ (this.id || '4920389')
+    })
+  }
+}
+</script>
+

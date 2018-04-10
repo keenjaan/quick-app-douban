@@ -1,0 +1,17 @@
+<script>
+  /**
+   * 应用级别的配置，供所有页面公用
+   */
+  // 一定放在最前面，不难后面要使用async，await会报错
+  import './module/es6'
+  // 请求接口模块
+  import './module/network'
+  import util from './util'
+
+  export default {
+    showMenu: util.showMenu,
+    createShortcut: util.createShortcut,
+    theme: {skin: 'green', color: '#42bd56'},
+    store: {name: 'lilei'}
+  }
+</script>

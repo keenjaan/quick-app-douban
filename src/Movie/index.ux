@@ -1,0 +1,187 @@
+<import name="rate" src="../components/rating/index"></import>
+<import name="header" src="../components/header/index"></import>
+<template>
+  <div class="warp">
+    <header  title="电影详情"></header>
+    <div class="warp-content">
+      <div>
+      <text class="title" style="color: {{theme.color}}">{{detail.title}}</text>
+    </div>
+    <div class="mess-warp">
+      <div class="mess" if="{{detail.id}}">
+        <div>
+          <rate rate="{{detail.ratings_count ? detail.rating.average : ''}}"></rate>
+          <text class="remark">{{detail.comments_count}}人评价</text>
+        </div>
+        <div class="move">
+          <text>{{detail.year}} {{detail.genres && detail.genres.join(' /')}}</text>
+          <text><span style="color: {{theme.color}}">原名：</span>{{detail.original_title}}</text>
+          <text><span style="color: {{theme.color}}">制片国家：</span>{{detail.countries && detail.countries.join('/')}}</text>
+          <text><span style="color: {{theme.color}}">别名：</span>{{detail.aka && detail.aka.join('/')}}</text>
+        </div>
+      </div>
+      <image class="cover" src="{{detail.images && detail.images.small}}"></image>
+    </div>
+    <text class="introduct" if="{{detail.id}}" style="color: {{theme.color}}">剧情简介</text>
+    <text class="introduct-detail">{{detail.summary}}</text>
+    <text class="actor" if="{{detail.id}}" style="color: {{theme.color}}">影人信息</text>
+    <tabs style="width: 750px;">
+      <tab-bar class="actor-warp" mode="scrollable">
+        <div class="actor-content" for="{{detail.directors}}">
+          <div class="actor-mess">
+            <image class="actor" src="{{$item.avatars.small}}"></image>
+            <div><text class="actor-name">{{$item.name}}</text></div>
+            <div><text class="actor-type">导演</text></div>
+          </div>
+        </div>
+        <div class="actor-content" for="{{detail.casts}}">
+          <div class="actor-mess">
+            <image class="actor" src="{{$item.avatars.small}}"></image>
+            <div><text class="actor-name">{{$item.name}}</text></div>
+            <div><text class="actor-type">演员</text></div>
+          </div>
+        </div>
+      </tab-bar>
+    </tabs>
+    <text onclick="toDouban" class="button" style="background-color: {{theme.color}}">豆瓣看详情</text>
+    </div>
+  </div>
+</template>
+
+<style>
+.button {
+  width: 200px;
+  height: 100px;
+  text-align: center;
+  border-radius: 6px;
+  color: #ffffff;
+  margin: 20px 0 30px 250px;
+}
+  .warp-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+  }
+  .actor-warp {
+    width: 750px;
+    height: 500px;
+    padding-right: 40px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .actor-name {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .actor-type {
+    color: #aaaaaa;
+  }
+  .actor-content {
+    width: 220px;
+    height: 500px;
+    padding-right: 20px;
+  }
+  .actor-mess {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .warp {
+    display: flex;
+    flex-direction:column;
+    background-color: #ffffff;
+  }
+  .title {
+    font-size: 42px;
+    margin-bottom: 20px;
+  }
+  .remark {
+    font-size: 24px;
+    margin-left: 15px;
+    color: #aaaaaa;
+  }
+  .cover {
+    width: 210px;
+    height: 315px;
+    margin-left: 30px;
+  }
+  .mess-warp {
+    display: flex;
+  }
+  .mess {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .mess-word {
+    font-size: 26px;
+    line-height: 40px;
+    margin-top: 24px;
+  }
+  .introduct {
+    color: #aaaaaa;
+    font-size: 30px;
+    margin: 30px 0 20px;
+  }
+  .introduct-detail {
+    line-height: 42px;
+  }
+  .tag {
+    padding: 5px 20px;
+    border-radius: 30px;
+    background-color:#f5f5f5;
+    color: #494949;
+  }
+  .tag-warp {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .tag-item {
+    padding: 10px 5px;
+  }
+  .move {
+    display: flex;
+    flex-direction: column;
+    font-size: 24px;
+    margin-top: 30px;
+  }
+  .actor {
+    width: 200px;
+    color: #aaaaaa;
+    margin: 30px 0 10px;
+  }
+  .su-title {
+    color: #999999;
+    margin-top: 20px;
+  }
+</style>
+
+<script>
+// import fetch from '@system.fetch';
+import webview from '@system.webview'
+export default {
+  public : {
+    detail: {},
+    id: '',
+    theme: {color: ''}
+  },
+  onReady () {
+    console.info('id', this.id);
+    this.theme = this.$app.$def.theme;
+    this.$page.setTitleBar({backgroundColor: this.theme.color, textColor: '#ffffff'});
+    this.getData(); 
+  },
+  async getData () {
+    const detail = await network.get('/v2/movie/subject/' + (this.id || '4920389'));
+    this.detail = JSON.parse(detail);
+    console.log(typeof(detail), 666);
+  },
+  toDouban () {
+    webview.loadUrl({
+      url: 'https://m.douban.com/movie/subject/'+ (this.id || '4920389')
+    })
+  }
+}
+</script>
+

@@ -1,0 +1,42 @@
+<template>
+  <div class="header" style="background-color: {{theme.color}}; color: {{theme.color}}">
+      <image onclick="back" class="img" src="../assets/back.png"></image>
+      <text class="title">{{title}}</text>
+  </div>
+</template>
+
+<style>
+  .header {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    padding: 0 80px 0 30px;
+  }
+  .img {
+    width: 50px;
+    height: 50px;
+  }
+  .title {
+    flex: 1;
+    text-align: center;
+    color: #ffffff;
+    font-size: 42px;
+  }
+</style>
+
+<script>
+  import router   from '@system.router';
+  export default {
+    props: ['title'],
+    data: {
+      theme: {color: ''}
+    },
+    onInit () {
+      this.theme = this.$app.$def.theme;
+    },
+    back () {
+      router.back();
+    }
+  }
+</script>

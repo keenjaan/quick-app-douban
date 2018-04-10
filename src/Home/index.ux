@@ -1,0 +1,412 @@
+<import name="movie" src="./movie/index"></import>
+<import name="music" src="./music/index"></import>
+<import name="book" src="./book/index"></import>
+<template>
+  <div class="home-warp">
+    <div class="header" style="background-color: {{theme.color}}">
+        <image onclick="showMenu" class="head-menu" src="../assets/menu.png"></image>
+        <text class="head-title">{{menuList[currentIndex].type}}</text>
+        <image if="true" class="head-search" src="../assets/search.png"></image>
+    </div>
+    <div class="content-warp" show="{{list[currentIndex].type==='movie'}}">
+        <movie if="{{list[0].render}}" class="item-content" onto-detail="toMovie"></movie>
+    </div>
+    <div class="content-warp" show="{{list[currentIndex].type==='book'}}">
+        <book if="{{list[1].render}}" class="item-content" onto-detail="toBook"></book>
+    </div>
+    <div class="content-warp" show="{{list[currentIndex].type==='music'}}">
+        <music if="{{list[2].render}}" class="item-content" onto-detail="toMusic"></music>
+    </div>
+    <div class="bottom">
+        <div class="line"></div>
+        <div class="bottom-content">
+            <div class="item-menu" for="{{menuList}}" onclick="changeTab($idx)">
+                <image class="icon" src="{{currentIndex===$idx ? $item.selectIcon : $item.defaultIcon}}"></image>
+                <text class="icon-word">{{$item.type}}</text>
+            </div>
+        </div>
+    </div>
+    <div class="model {{modelStyle}}" style="width: {{clear}}" onclick="close">
+        <div onclick="stop" class="model-menu {{menuStyle}}">
+            <div class="bg">
+                <div class="self-mess">
+                    <image class="favicon" src="../assets/github.png"></image>
+                    <text class="name">Keen Jaan</text>
+                </div>
+            </div>
+            <block for="{{menu}}">
+                <div class="menu-item" onclick="toPage($item.router)">
+                    <image class="icon-setting" src="{{$item.img[theme.skin]}}"></image>
+                    <div class="menu-item-warp"><text class="menu-item-word">{{$item.name}}</text></div>
+                </div>
+                <div class="line-black"></div>
+            </block>
+            
+            
+        </div>
+    </div>
+  </div>
+</template>
+
+<style>
+    .icon-setting {
+        width: 50px;
+        height: 50px;
+        margin-right: 50px;
+    }
+    .line-black {
+        width: 100%;
+        height: 0;
+        border: 1px solid #bbbbbb;
+    }
+    .menu-item-warp {
+        width: 300px;
+    }
+    .menu-item-word {
+        font-size: 36px;
+        width: 300px;
+        color: #666666;
+    }
+    .menu-item {
+        height: 120px;
+        display: flex;
+        align-items: center;
+        padding-left: 30px;
+    }
+    .bg {
+        width: 600px;
+        height: 400px;
+        background-image: url('../assets/bg.png');
+        
+    }
+    .name {
+        margin-top: 40px;
+        font-size: 48px;
+        width: 300px;
+        text-align: center;
+        color: #cccccc;
+    }
+    .self-mess {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 300px;
+        height: 100%;
+    }
+    .favicon {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+    }
+    .header {
+        height: 100px;
+        padding: 0 30px;
+        display: flex;
+        align-items: center;
+    }
+    .head-title {
+        flex: 1;
+        text-align: center;
+        color: #ffffff;
+    }
+    .head-menu {
+        width: 50px;
+        height: 50px;
+    }
+    .head-search {
+        width: 50px;
+        height: 50px;
+    }
+    .home-warp {
+       display: flex;
+       flex-direction: column;
+    }
+    .content-warp {
+        flex: 1;
+        padding-bottom: 121px;
+    }
+    .model {
+        position: fixed;
+        height: 100%;
+    }
+    .show-model {
+        animation-name: showModel;
+        animation-duration: 200ms;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation-timing-function: ease-in-out;
+    }
+    .hide-model {
+        animation-name: hideModel;
+        animation-duration: 200ms;
+        animation-timing-function: ease-in-out;       
+        background-color: rgba(0, 0, 0, 0);
+    }
+    .model-menu {
+        width: 600px;
+        height: 100%;
+        background-color: #d1d1d1;
+        display: flex;
+        flex-direction: column;
+    }
+    .show-menu {
+        
+        animation-name: showMenu;
+        animation-duration: 200ms;
+        animation-timing-function: ease-in-out;
+    }
+    .hide-menu {
+        animation-name: hideMenu;
+        animation-duration: 200ms;
+        animation-timing-function: ease-in-out;
+        
+    }
+    @keyframes showModel {
+        0%  {
+            background-color: rgba(0, 0, 0 ,0);
+            }
+        50%  {
+            background-color: rgba(0, 0, 0 ,0.4);
+            }
+        100%  {
+            background-color: rgba(0, 0, 0, 0.5);
+            }
+    }
+    @keyframes showMenu {
+        0% {
+            transform: translateX(-600px);
+            }
+        100% {
+            transform: translateX(0);
+        }
+    }
+     @keyframes hideModel {
+        0%  {
+            background-color: rgba(0, 0, 0, 0.5);
+            }
+        50%  {
+            background-color: rgba(0, 0, 0 ,0.4);
+            }
+        100%  {
+            background-color: rgba(0,0, 0, 0);
+            }
+    }
+    @keyframes hideMenu {
+        0% {
+            transform: translateX(0);
+            }
+        100% {
+            transform: translateX(-600px);
+        }
+    }
+    .bottom {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 121px;
+        display: flex;
+        flex-direction: column;
+    }
+    .line {
+        width: 100%;
+        height: 0;
+        border: 1px solid #dddddd;
+    }
+    .bottom-content {
+        width: 100%;
+        height: 120px;
+    }
+    .item-menu {
+        width: 33.33%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .icon {
+        width: 50px;
+        height: 50px;
+    }
+    .icon-word {
+        font-size: 24px;
+        color: #999999;
+        margin-top: 8px;
+    }
+</style>
+
+<script>
+import router from '@system.router'
+import prompt from '@system.prompt'
+export default {
+  data: {
+    menuList: [
+        {
+            type: '电影',
+            defaultIcon: '../assets/film.png',
+            name: 'film'
+        },
+        {
+            type: '读书',
+            defaultIcon: '../assets/book.png',
+            name: 'book'
+        },
+        {
+            type: '音乐',
+            defaultIcon: '../assets/music.png',
+            name: 'music'
+        }
+    ],
+    list: [
+        {
+            type: 'movie',
+            render: true
+        },
+        {
+            type: 'book',
+            render: false
+        },
+        {
+            type: 'music',
+            render: false
+        }
+    ],
+    skinIcon: {
+        green: {
+            film: '../assets/film-green.png',
+            book: '../assets/book-green.png',
+            music: '../assets/music-green.png'
+        },
+        blue: {
+            film: '../assets/film-blue.png',
+            book: '../assets/book-blue.png',
+            music: '../assets/music-blue.png'
+        },
+        pink: {
+            film: '../assets/film-pink.png',
+            book: '../assets/book-pink.png',
+            music: '../assets/music-pink.png'
+        }
+    },
+    menu: [
+        {
+            name: '主页',
+            img: {
+                green: '../assets/home-green.png',
+                blue: '../assets/home-blue.png',
+                pink: '../assets/home-pink.png'
+            },
+            router: '/HomePage'
+        },
+        {
+            name: '主题',
+            img: {
+                green: '../assets/theme-green.png',
+                blue: '../assets/theme-blue.png',
+                pink: '../assets/theme-pink.png'
+            },
+            router: '/Theme'
+        },
+        {
+            name: '反馈',
+            img: {
+                green: '../assets/suggest-green.png',
+                blue: '../assets/suggest-blue.png',
+                pink: '../assets/suggest-pink.png'
+            },
+            router: ''
+        },
+        {
+            name: '关于',
+            img: {
+                green: '../assets/about-green.png',
+                blue: '../assets/about-blue.png',
+                pink: '../assets/about-pink.png'
+            },
+            router: '/About'
+        }
+    ],
+    modelStyle: '',
+    menuStyle: '',
+    clear: '0',
+    currentIndex: 0,
+    theme: {skin: ''}
+  },
+  onReady () {
+      this.theme = this.$app.$def.theme;
+      this.$page.setTitleBar({backgroundColor: this.theme.color, textColor: '#ffffff'});
+      // console.log(JSON.stringify(this.theme), 'app theme');
+      const skin = this.skinIcon[this.theme.skin];
+      // console.log(JSON.stringify(skin), 787878);
+      const arr = this.menuList.map(item => {
+          item.selectIcon = skin[item.name];
+          return Object.assign({}, item);
+      });
+      this.menuList = arr;
+      this.$watch('theme.skin', 'switchSkin');
+  },
+  switchSkin (newSkin, oldSkin) {
+      this.$page.setTitleBar({backgroundColor: newSkin, textColor: '#ffffff'});
+      console.log(newSkin, oldSkin, 8888);
+      const skin = this.skinIcon[newSkin];
+      const arr = this.menuList.map(item => {
+          item.selectIcon = skin[item.name];
+          return Object.assign({}, item);
+      });
+      this.menuList = arr;
+  },
+  showMenu (evt) {
+      this.clear = '750px';
+      this.modelStyle = 'show-model';
+      this.menuStyle = 'show-menu';
+  },
+  close () {
+      this.modelStyle = 'hide-model';
+      this.menuStyle = 'hide-menu';
+      const that = this;
+      setTimeout(function () {
+          that.clear = '0';
+      }, 200);
+  },
+  stop () {
+      return false;
+  },
+  changeTab (index) {
+    this.currentIndex = index;
+    this.list[index].render = true;
+  },
+  toMovie (params) {
+      console.log('movie', params.detail.id);
+      router.push({
+          uri: '/Movie',
+          params: {id: params.detail.id}
+      });
+  },
+  toBook (params) {
+      console.log('book');
+      router.push({
+          uri: '/Book',
+          params: {id: params.detail.id}
+      });
+  },
+  toMusic (params) {
+      // console.log('music', JSON.stringify(params));
+      router.push({
+          uri: '/Music',
+          params: {id: params.detail.id}
+      });
+  },
+  toPage (path) {
+     if (path) {
+         router.push({
+             uri: path
+         });
+     } else {
+        prompt.showToast({
+            message:'暂无该功能'
+        })
+     }
+  }
+}
+</script>
+

@@ -1,0 +1,91 @@
+<import name="list-movie" src="../list/index"></import>
+
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div class="home">
+    <tabs onchange="onChangeTabIndex" class="tab">
+      <tab-bar class="tab-bar">
+        <div class="tab-item-warp" for="{{tabHeadList}}">
+          <text style="color: {{$idx==currentIndex ? theme.color : '#666666'}}" class="tab-item">{{$item.title}}</text>
+          <div style="border-color: {{theme.color}}" if="$idx==currentIndex" class="line"></div>
+        </div>
+      </tab-bar>
+      
+      <tab-content class="tab-content">
+        <div for="{{tabHeadList}}">
+          <list-movie index="{{$idx}}" url="{{$item.url}}" if="{{ renderTabContent($idx) }}"></list-movie>
+        </div>
+      </tab-content>
+    </tabs> 
+  </div>
+</template>
+
+<style>
+  .header-line {
+    width: 100%;
+    border: 1px solid #eeeeee;
+  }
+  .tab-item-warp {
+    width: 33.33%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .line {
+    width: 30%;
+    border-style: solid;
+    border-width: 1px;
+  }
+  .tab-item {
+    text-align: center;
+    width: 50%;
+    margin-bottom: 15px;
+  }
+  .tab-bar {
+    display: flex;
+    border: 1px solid #eeeeee;
+  }
+</style>
+
+<script>
+  export default {
+    data: {
+      tabHeadList: [
+        {
+          title: "Top250",
+          url: '/v2/movie/top250?count=20'
+        },
+        {
+          title: "正在热映",
+          url: '/v2/movie/in_theaters?count=20'
+        },
+        {
+          title: "即将上映",
+          url: '/v2/movie/coming_soon?count=20'
+        }
+      ],
+      currentIndex: 0,
+      theme: {color: ''}
+    },
+    onInit(){
+      this.theme = this.$app.$def.theme;
+      // this.$watch('theme.color', 'switchSkin');
+      // 加载第一个页签内容
+      this.changeTabIndex(0)
+    },
+    changeTabIndex(index) {
+      const item = Object.assign({}, this.tabHeadList[index])
+      item.render = true
+      this.tabHeadList.splice(index, 1, item)
+    },
+    onChangeTabIndex (evt) {
+      this.currentIndex = evt.index
+      this.changeTabIndex(evt.index)
+    },
+    renderTabContent (index) {
+      return !!this.tabHeadList[index].render
+    }
+  }
+</script>

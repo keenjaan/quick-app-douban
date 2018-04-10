@@ -1,0 +1,169 @@
+<import name="rate" src="../components/rating/index"></import>
+<import name="header" src="../components/header/index"></import>
+<template>
+  <div class="warp">
+    <header  title="图书详情"></header>
+    <div class="warp-content">
+      <div>
+      <text class="title" style="color: {{theme.color}}">{{detail.title}}</text>
+    </div>
+    <div class="mess-warp" if="{{detail.title}}">
+      <div class="mess">
+        <div>
+          <rate rate="{{detail.rating && detail.rating.numRaters ? detail.rating.average : ''}}"></rate>
+          <text class="remark">{{detail.rating && detail.rating.numRaters}}人评价</text>
+        </div>
+        <div class="move">
+          <text><span style="color: {{theme.color}}">作者：</span>{{detail.author && detail.author.join('/')}}</text>
+          <text><span style="color: {{theme.color}}">原名：</span>{{detail.origin_title}}</text>
+          <text><span style="color: {{theme.color}}">译者：</span>{{detail.translator}}</text>
+          <text><span style="color: {{theme.color}}">出版社：</span>{{detail.publisher}}</text>
+          <text><span style="color: {{theme.color}}">出版时间：</span>{{detail.pubdate}}</text>
+          <text>{{detail.pages}}页 / {{detail.binding}} / {{detail.price}}</text>
+        </div>
+      </div>
+      <image class="cover" src="{{detail.image}}"></image>
+    </div>
+    <div class="line" if="{{detail.title}}"></div>
+    <div class="e-book" if="{{detail.title}}" onclick="buy">
+        <text style="color: {{theme.color}}">豆瓣购买</text>
+        <text style="color: #e43937">{{detail.price}}</text>
+    </div>
+    <div class="line-middle" if="{{detail.title}}"></div>
+    <div class="e-book" if="{{detail.title}}">
+        <text style="color: {{theme.color}}">电子书</text>
+        <text style="color: #e43937">{{detail.ebook_price ? detail.ebook_price+'元' : '暂无价格'}}</text>
+    </div>
+    <div class="line" if="{{detail.title}}"></div>
+    <text class="introduct" if="{{detail.title}}" style="color: {{theme.color}}">内容简介</text>
+    <text class="introduct-detail">{{detail.summary}}</text>
+    <text class="actor" if="{{detail.title}}" style="color: {{theme.color}}">作者简介</text>
+    <text>{{detail.author_intro}}</text>
+    <text class="introduct" if="{{detail.title}}" style="color: {{theme.color}}">相关标签</text>
+    <div class="tag-warp">
+      <div class="tag-item" for="{{detail.tags}}">
+        <div class="tag">
+          <text>{{$item.name}}</text>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</template>
+
+<style>
+  .warp {
+    display: flex;
+    flex-direction:column;
+    background-color: #ffffff;
+  }
+  .warp-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+  }
+  .title {
+    font-size: 42px;
+    margin-bottom: 20px;
+  }
+  .remark {
+    font-size: 24px;
+    margin-left: 15px;
+    color: #aaaaaa;
+  }
+  .cover {
+    width: 210px;
+    height: 315px;
+    margin-left: 30px;
+  }
+  .mess-warp {
+    display: flex;
+    margin-bottom: 40px;
+  }
+  .mess {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .mess-word {
+    font-size: 26px;
+    line-height: 40px;
+    margin-top: 24px;
+  }
+  .introduct {
+    color: #aaaaaa;
+    font-size: 30px;
+    margin: 30px 0 20px;
+  }
+  .introduct-detail {
+    line-height: 42px;
+  }
+  .tag {
+    padding: 5px 20px;
+    border-radius: 30px;
+    background-color:#f5f5f5;
+    color: #494949;
+  }
+  .tag-warp {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .tag-item {
+    padding: 10px 5px;
+  }
+  .move {
+    display: flex;
+    flex-direction: column;
+    font-size: 24px;
+    margin-top: 30px;
+  }
+  .actor {
+    color: #aaaaaa;
+    margin: 30px 0 10px;
+  }
+  .su-title {
+    color: #999999;
+    margin-top: 20px;
+  }
+  .e-book {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+  .line {
+      width: 100%;
+      border: 1px solid #dddddd;
+  }
+  .line-middle {
+      width: 100%;
+      border: 1px solid #eeeeee;
+  }
+</style>
+
+<script>
+import webview from '@system.webview'
+export default {
+  public : {
+    detail: {},
+    id: '',
+    theme: {color: ''}
+  },
+  onReady () {
+    this.theme = this.$app.$def.theme;
+    this.$page.setTitleBar({backgroundColor: this.theme.color, textColor: '#ffffff'});
+    this.getData();
+  },
+  async getData () {
+    const detail = await network.get('/v2/book/' + (this.id));
+    const data = JSON.parse(detail);
+    this.detail = data;
+  },
+  buy () {
+    webview.loadUrl({
+      url: 'https://m.douban.com/book/subject/'+ this.id
+    })
+  }
+}
+</script>
+

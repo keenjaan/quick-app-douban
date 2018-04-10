@@ -1,0 +1,64 @@
+<import name="header" src="../components/header/index"></import>
+<template>
+  <div class="warp">
+    <header title="主题"></header>
+    <div>
+        <div for="{{skinList}}" class="skin" style="background-color: {{$item.color}}" onclick="selectTheme($idx)">
+          <text if="{{selectIndex === $idx}}" class="select">√</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+    .skin {
+        width: 200px;
+        height: 150px;
+        border-radius: 6px;
+        margin: 20px 25px;
+    }
+    .select {
+        color: #ffffff;
+        font-size: 100px;
+        width: 100%;
+        text-align: center;
+    }
+    .warp {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+
+<script>
+export default {
+  data: {
+      skinList: [
+          {skin: 'green', color: '#42bd56'},
+          {skin: 'blue', color: '#4285f5'},
+          {skin: 'pink', color: '#ff6478'}
+      ],
+      selectIndex: 0,
+      theme : {color: ''}
+  },
+  onInit () {
+      this.theme = this.$app.$def.theme;
+      // this.$page.setTitleBar({backgroundColor: this.theme.color, textColor: '#ffffff'});
+      this.$watch('theme.color', 'switch');
+      const skin =  this.$app.$def.theme.skin;
+      for(var i = 0; i < this.skinList.length; i++) {
+          if (this.skinList[i].skin === skin) {
+              this.selectIndex = i;
+              break;
+          }
+      }
+  },
+  selectTheme (index) {
+      this.selectIndex = index;
+      this.$app.$def.theme.skin = this.skinList[index].skin; 
+      this.$app.$def.theme.color = this.skinList[index].color;
+  },
+  switch (newValue, oldValue) {
+      // this.$page.setTitleBar({backgroundColor: newValue, textColor: '#ffffff'});
+  }
+}
+</script>

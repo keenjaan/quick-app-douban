@@ -1,0 +1,178 @@
+<import name="cover" src="../../components/cover/index"></import>
+
+<template>
+  <!-- template里只能有一个根节点 -->
+  <refresh class="demo-page" refreshing='{{refreshing}}' onrefresh="refresh" style="progress-color:{{theme.color}}">
+    <list onscrollbottom="renderMoreListItem">
+      <!--
+        <list-item type="item" class="item">
+            <cover class="cover-item" mess="{{({id: '30168408', rating: {numRaters: 1000, average: 8.6}, title: '士兵突击', image: 'https://img3.doubanio.com/lpic/s29687411.jpg'})}}"></cover>
+        </list-item>
+      -->
+        <block for="productList">
+            <list-item type="item" class="item">
+                <cover mess="{{cover}}" if="{{cover.id}}" for="{{cover in $item}}" class="cover-item"></cover>
+            </list-item>
+        </block>
+        <list-item type="loadStatus" class="load-status">
+            <progress style="color: {{theme.color}}" type="circular" show="{{hasMoreData}}"></progress>
+            <text class="loading" show="{{hasMoreData}}">加载更多···</text>
+            <text show="{{!hasMoreData}}">没有更多了~</text>
+        </list-item> 
+    </list>
+  </refresh>
+</template>
+
+<style>
+  .tab-item {
+    text-align: center;
+    width: 33.33%;
+  }
+  .tab-bar {
+    display: flex;
+  }
+
+  .cover-item {
+    margin: 20px;
+  }
+
+  .load-status {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .loading {
+    
+    text-align: center;
+  }
+</style>
+
+<script>
+import fetch from '@system.fetch'
+  // let memList = []
+  export default {
+    props: ['url'],
+    data: {
+      refreshing: false,
+      productList: [],
+      hasMoreData: true,
+      // 每次渲染的商品数
+      size: 12,
+      // 是否正在fetch请求数据
+      isLoadingData: false,
+      tempList: [],
+      memList: [],
+      theme: {color: ''},
+      type: ''
+    },
+    /**
+     * 当用户点击菜单按钮时触发，调用app中定义的方法showMenu
+     * 注意：使用加载器测试`创建桌面快捷方式`功能时，请先在`系统设置`中打开`应用加载器`的`桌面快捷方式`权限
+     */
+    onInit () {
+      if (/movie/.test(this.url)) {
+        this.type = 'subjects';
+      } else if (/music/.test(this.url)) {
+        this.type = 'musics';
+      } else {
+        this.type = 'books';
+      }
+      console.log(this.type, 'type');
+      this.theme = this.$app.$def.theme;
+      this.loadAndRender()
+    },
+    refresh (evt) {
+      this.refreshing = true;
+      this.memList = [];
+      this.loadAndRender();
+      this.tempList = [];
+      this.productList = [];
+    },
+    loadAndRender (doRender = true) {
+      this.isLoadingData = true
+      // 重新请求数据并根据模式判断是否需要渲染列表
+      this.getData(
+        function (resList) {
+          this.isLoadingData = false
+          this.refreshing = false;
+          if (!resList) {
+            console.error(`数据请求错误`)
+          }
+          else if (!resList.length) {
+            this.hasMoreData = false
+          }
+          else {
+            this.memList = this.memList.concat(resList)
+            if (doRender) {
+              this._renderList()
+            }
+          }
+        }.bind(this)
+      );
+    },
+    _renderList () {
+      // 渲染列表
+      if (this.memList.length > 0) {
+        const list = this.memList.splice(0, this.size)
+        this.tempList = this.tempList.concat(list)
+        this.productList = this.arrTrans(this.tempList, 3);
+        // console.log(JSON.stringify(this.productList), 888);
+        // this.productList = this.productList.concat(list)
+      }
+      if (this.memList.length <= this.size && this.hasMoreData) {
+        // 提前请求新的数据
+        this.loadAndRender(false)
+      }
+    },
+    /**
+     * 滑动到底部时加载更多
+     */
+    renderMoreListItem () {
+      console.log('滚到底部', this.isLoadingData);
+      if (!this.isLoadingData) {
+        this._renderList()
+      }
+    },
+    /**
+     * 一维数组转二维数组
+     */
+    arrTrans (arr, num) {
+      var newArray = new Array(Math.ceil(arr.length / num));
+      for (var i = 0; i<newArray.length; i++) {
+        newArray[i] = [];
+        for(var j = 0; j<num; j++) {
+          newArray[i][j] = {};
+        }
+      }
+      for(var i = 0; i<arr.length; i++) {
+        newArray[parseInt(i/num)][i%num] = arr[i];
+      }
+      return newArray;
+    },
+    // getData (cb) {
+    //   fetch.fetch({
+    //     url:'https://api.douban.com/v2/movie/coming_soon',
+    //     method: 'GET',
+    //     success:function(data){
+    //       cb(JSON.parse(data.data).subjects);
+    //       // console.log(34599);
+    //       console.log("title: " + data);
+    //     },
+    //     fail: function(data) {
+    //       // cb([]);
+    //       console.log(data);
+    //     }
+    //   })
+    // }
+    async getData (cb) {
+      console.log(this.url, 'url');
+      const data = await network.get(this.url);
+      console.log(data);
+      const arr = JSON.parse(data)[this.type];
+      cb(arr);
+
+      // this.productList = this.arrTrans(arr, 3);
+    }
+  }
+</script>

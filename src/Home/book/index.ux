@@ -1,0 +1,91 @@
+<import name="list-book" src="../list/index"></import>
+
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div class="home">
+    <tabs onchange="onChangeTabIndex" class="tab">
+      <tab-bar class="tab-bar">
+      <div class="tab-item-warp" for="{{tabHeadList}}">
+        <text style="color: {{$idx==currentIndex ? theme.color : '#666666'}}" class="tab-item">{{$item.title}}</text>
+        <div style="border-color: {{theme.color}}" if="$idx==currentIndex" class="line"></div>
+      </div>
+      </tab-bar>
+     
+      <tab-content class="tab-content">
+        <div for="{{tabHeadList}}">
+          <list-book url="{{$item.url}}" if="{{ renderTabContent($idx) }}"></list-book>
+        </div>
+      </tab-content>
+    </tabs>
+  </div>
+</template>
+
+<style>
+  .header-line {
+    width: 100%;
+    border: 1px solid #eeeeee;
+  }
+  .tab-item-warp {
+    width: 33.33%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .line {
+    width: 30%;
+    border-style: solid;
+    border-width: 1px;
+  }
+  .tab-item {
+    text-align: center;
+    width: 50%;
+    margin-bottom: 15px;
+  }
+  .tab-bar {
+    display: flex;
+    border: 1px solid #eeeeee;
+  }
+</style>
+
+<script>
+  export default {
+    data: {
+      tabHeadList: [
+        {
+          title: "小说",
+          url: '/v2/book/search?count=20&tag=小说'
+        },
+        {
+          title: "历史",
+          url: '/v2/book/search?count=20&tag=历史'
+        },
+        {
+          title: "传记",
+          url: '/v2/book/search?count=20&tag=传记'
+        }
+      ],
+      currentIndex: 0,
+      theme: {color: ''}
+    },
+    onInit(){
+      console.log('start book');
+      this.theme = this.$app.$def.theme;
+      // 加载第一个页签内容
+      this.changeTabIndex(0)
+    },
+    changeTabIndex(index) {
+      const item = Object.assign({}, this.tabHeadList[index])
+      item.render = true
+      this.tabHeadList.splice(index, 1, item)
+    },
+    onChangeTabIndex (evt) {
+      this.currentIndex = evt.index
+      this.changeTabIndex(evt.index)
+    },
+    renderTabContent (index) {
+      return !!this.tabHeadList[index].render
+    }
+  }
+</script>

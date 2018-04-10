@@ -1,0 +1,82 @@
+<import name="header" src="../components/header/index"></import>
+<template>
+   <div class="home-page-warp"> 
+        <header title="主页"></header>
+        <image src="../assets/bg.png"></image>
+        <div><text class="introduction">作者简介</text></div>
+        <div class="content-warp">
+            <div class="content">
+                <div class="item-warp">
+                    <text class="item-order">1、</text>
+                    <div>
+                        <text class="mess">坐标深圳，前端小码农一个，网易云控，喜欢摄影（拿个破相机到处跑）和户外运动。喜欢和技术爱好者交朋友，一起探讨技术问题。</text>
+                    </div>
+                </div>
+                <div class="item-warp">
+                    <text class="item-order">2、</text>
+                    <div>
+                        <text class="mess">重点说一下，本人十分热爱户外运动，登山、徒步、露营、等户外运动欢迎带上我，当然摄影老司机也可以带上我（不要嫌我拍照技术差）</text>
+                    </div>
+                </div>
+                <div class="item-warp">
+                    <text class="item-order">3、</text>
+                    <div>
+                        <text class="mess">联系方式：keenjaan@163.com</text>
+                    </div>
+                </div>
+                <div class="item-warp">
+                    <text class="item-order">4、</text>
+                    <div>
+                        <text class="mess">关于技术问题和户外运动欢迎来骚扰！</text>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+</template>
+
+<style>
+    .home-page-warp {
+        display: flex;
+        flex-direction: column;
+        background-color: #f0edef;
+    }
+    .content {
+        display: flex;
+        flex-direction: column;
+        background-color: #ffffff;
+        padding: 10px;
+    }
+    .mess {
+        font-size: 32px;
+        line-height: 40px;
+    }
+    .item-warp {
+        margin: 10px 0;
+        display: flex;
+        align-items: flex-start;
+    }
+    .item-order {
+        width: 50px;
+        line-height: 40px;
+        font-size: 32px;
+    }
+    .introduction {
+        font-size: 48px;
+        margin: 30px;
+    }
+    .content-warp {
+        padding: 0 30px;
+        
+    }
+</style>
+
+<script>
+export default {
+  onInit () {
+      const theme = this.$app.$def.theme;
+      // this.$page.setTitleBar({backgroundColor: theme.color, textColor: '#ffffff'});
+  }
+}
+</script>
+

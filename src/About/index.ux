@@ -1,0 +1,90 @@
+<import name="header" src="../components/header/index"></import>
+<template>
+   <div class="about-warp">
+        <header  title="项目详情"></header>
+        <div style="padding: 0 30px">
+            <div class="description">
+            <div class="item-warp">
+                <text class="item-order">1、</text>
+                <div>
+                    <text class="mess">本项目为熟悉快应用练手项目，仅供大家参考！</text>
+                </div>
+            </div>
+                <div class="item-warp">
+                <text class="item-order">2、</text>
+                <div>
+                    <text class="mess">本项目的所有数据来源为豆瓣api接口，一切解释权归豆瓣所有。</text>
+                </div>
+            </div>
+                <div class="item-warp">
+                <text class="item-order">3、</text>
+                <div>
+                    <text class="mess">注意豆瓣api的接口有调用限制，每分钟10次，所以在体验时不要高频的调用接口，否则会被豆瓣封掉。为了减少请求次数，对于下拉刷新效果默认我将其注释了，看效果可以将注释去掉。</text>
+                </div>
+            </div>
+                <div class="item-warp">
+                <text class="item-order">4、</text>
+                <div>
+                    <text class="mess">关于本项目的问题欢迎来一起探讨！</text>
+                </div>
+            </div>
+                <div class="item-warp">
+                <text class="item-order">5、</text>
+                <div>
+                    <text class="mess">若转载请注明来源https://github.com/</text>
+                </div>
+            </div>
+                <div class="item-warp">
+                <text class="item-order">6、</text>
+                <div>
+                    <text class="mess">欢迎star</text>
+                </div>
+            </div>
+        </div>
+        <div>
+   </div>
+</template>
+
+<style>
+    .about-warp {
+        display: flex;
+        flex-direction: column;
+       
+        background-color: #f0edef;
+    }
+    .description {
+        display: flex;
+        flex-direction: column;
+        background-color: #ffffff;
+        margin-top: 30px;
+        border: 1px solid #dddddd;
+        padding: 10px;
+    }
+    .mess {
+        font-size: 32px;
+        line-height: 40px;
+    }
+    .item-warp {
+        margin: 10px 0;
+        display: flex;
+        align-items: flex-start;
+    }
+    .item-order {
+        width: 50px;
+        line-height: 40px;
+        font-size: 32px;
+    }
+</style>
+
+<script>
+export default {
+    data: {
+        theme: {color: ''}
+    },
+  onInit () {
+      this.theme = this.$app.$def.theme;
+      // this.$page.setTitleBar({backgroundColor: this.theme.color, textColor: '#ffffff'});
+  }
+}
+</script>
+
