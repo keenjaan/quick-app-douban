@@ -1,8 +1,6 @@
 该项目为快应用练手项目，预览图：
 
-![页面展示](shotscreen/3.gif)
-
-![换肤](shotscreen/1.gif)
+![页面展示](shotscreen/5.gif)![页面展示](shotscreen/6.gif)![页面展示](shotscreen/7.gif)![页面展示](shotscreen/8.gif)![换肤](shotscreen/1.gif)
 ~~~bash
 ├─ .babelrc
 ├─ .eslintrc.json

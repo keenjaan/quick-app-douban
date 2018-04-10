@@ -36,7 +36,7 @@
         </div>
         <div class="actor-content" for="{{detail.casts}}">
           <div class="actor-mess">
-            <image class="actor" src="{{$item.avatars.small}}"></image>
+            <image class="actor" src="{{$item.avatars && $item.avatars.small}}"></image>
             <div><text class="actor-name">{{$item.name}}</text></div>
             <div><text class="actor-type">演员</text></div>
           </div>
@@ -49,14 +49,14 @@
 </template>
 
 <style>
-.button {
-  width: 200px;
-  height: 100px;
-  text-align: center;
-  border-radius: 6px;
-  color: #ffffff;
-  margin: 20px 0 30px 250px;
-}
+  .button {
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    border-radius: 6px;
+    color: #ffffff;
+    margin: 20px 0 30px 250px;
+  }
   .warp-content {
     display: flex;
     flex-direction: column;
@@ -173,9 +173,9 @@ export default {
     this.getData(); 
   },
   async getData () {
-    const detail = await network.get('/v2/movie/subject/' + (this.id || '4920389'));
+    const detail = await network.get('/v2/movie/subject/' + (this.id || '30183442'));
     this.detail = JSON.parse(detail);
-    console.log(typeof(detail), 666);
+    // console.log(typeof(detail), 666);
   },
   toDouban () {
     webview.loadUrl({
