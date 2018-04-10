@@ -1,10 +1,10 @@
 ~~~bash
-│  .babelrc
-│  .eslintrc.json
-│  .gitignore
-|  .npmignore
-│  package.json
-│  README.md
+├─ .babelrc
+├─ .eslintrc.json
+├─ .gitignore
+├─ .npmignore
+├─ package.json
+├─ README.md
 │
 ├─sign
 |
