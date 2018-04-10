@@ -10,7 +10,7 @@ node_modules
 npm-debug.log
 yarn-error.log
 .idea
-dist/*
+build/*
 !dist/download
 !dist/download/*
 !dist/res

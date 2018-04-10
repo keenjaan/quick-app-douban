@@ -6,7 +6,7 @@
     <div class="header" style="background-color: {{theme.color}}">
         <image onclick="showMenu" class="head-menu" src="../assets/menu.png"></image>
         <text class="head-title">{{menuList[currentIndex].type}}</text>
-        <image if="true" class="head-search" src="../assets/search.png"></image>
+        <image onclick="toSearch" class="head-search" src="../assets/search.png"></image>
     </div>
     <div class="content-warp" show="{{list[currentIndex].type==='movie'}}">
         <movie if="{{list[0].render}}" class="item-content" onto-detail="toMovie"></movie>
@@ -406,6 +406,11 @@ export default {
             message:'暂无该功能'
         })
      }
+  },
+  toSearch () {
+    prompt.showToast({
+        message:'暂无该功能'
+    })
   }
 }
 </script>
