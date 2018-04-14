@@ -121,8 +121,10 @@
     .home-warp {
        display: flex;
        flex-direction: column;
+			 height: 100%;
     }
     .content-warp {
+		width: 750px;
         flex: 1;
         padding-bottom: 121px;
     }

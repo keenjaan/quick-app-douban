@@ -4,18 +4,31 @@
 ~~~
 ## 克隆项目
 git clone git@github.com:keenjaan/quick-app-douban.git
+
 ## 安装依赖
 npm install
+
 ## 运行项目
 npm run watch
+
 ## 运行本地服务，手机远程调试
 npm run server -- --port 1234
 ~~~
 
+**注意：**
 
-预览图：
+如果开发者在后续操作中遇到报错`Cannot find module '.../node_modules/hap-tools/webpack.config.js'`，请运行一次`hap update --force`（执行完毕后**不需要**按照提示再次运行`npm install`）
+
+上面是官方文档上的提示，clone我项目本地运行时可能遇到这个问题。
+
+
+
+#### 预览图：
 
 ![页面展示](shotscreen/5.gif)	![页面展示](shotscreen/6.gif)	![页面展示](shotscreen/7.gif)	![页面展示](shotscreen/8.gif)	![换肤](shotscreen/1.gif)
+
+#### 项目目录结构
+
 ~~~bash
 ├─ .babelrc
 ├─ .eslintrc.json

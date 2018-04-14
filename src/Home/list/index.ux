@@ -64,7 +64,8 @@ import fetch from '@system.fetch'
       tempList: [],
       memList: [],
       theme: {color: ''},
-      type: ''
+      type: '',
+      count: 0
     },
     /**
      * 当用户点击菜单按钮时触发，调用app中定义的方法showMenu
@@ -84,6 +85,7 @@ import fetch from '@system.fetch'
     },
     refresh (evt) {
       this.refreshing = true;
+      this.count = 0;
       this.memList = [];
       this.loadAndRender();
       this.tempList = [];
@@ -94,6 +96,7 @@ import fetch from '@system.fetch'
       // 重新请求数据并根据模式判断是否需要渲染列表
       this.getData(
         function (resList) {
+          this.count += 20;
           this.isLoadingData = false
           this.refreshing = false;
           if (!resList) {
@@ -167,7 +170,7 @@ import fetch from '@system.fetch'
     // }
     async getData (cb) {
       console.log(this.url, 'url');
-      const data = await network.get(this.url);
+      const data = await network.get(this.url + '&start='+this.count);
       console.log(data);
       const arr = JSON.parse(data)[this.type];
       cb(arr);
